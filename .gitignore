@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 mvnw
 mvnw.cmd
-
+.gitattributes
 ### STS ###
 .apt_generated
 .classpath
@@ -33,5 +33,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-.gitattributes
