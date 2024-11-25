@@ -1,0 +1,43 @@
+services:
+
+  jaba-food-backend-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/jaba
+      DATABASE_USER: user
+      DATABASE_PASSWORD: password
+      FLYWAY_DATABASE_URL: jdbc:postgresql://postgres:5432/jaba
+      FLYWAY_DATABASE_USER: user
+      FLYWAY_DATABASE_PASSWORD: password
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: jaba
+      POSTGRES_USER: user
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@jaba.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

@@ -1,13 +1,13 @@
-package JabaFood.backend.user;
+package app.jaba;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JabaFoodBackendUserApplication {
+public class App {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JabaFoodBackendUserApplication.class, args);
+		SpringApplication.run(App.class, args);
 	}
 
 }
