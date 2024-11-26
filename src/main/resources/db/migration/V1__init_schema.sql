@@ -30,18 +30,3 @@ CREATE TABLE IF NOT EXISTS addresses (
     user_id UUID NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
-CREATE OR REPLACE FUNCTION update_last_update_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.last_update = NOW();
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS before_update_users ON users;
-
-CREATE TRIGGER before_update_users
-    BEFORE UPDATE ON users
-    FOR EACH ROW
-    EXECUTE FUNCTION update_last_update_column();

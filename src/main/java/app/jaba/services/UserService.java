@@ -9,10 +9,11 @@ import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.RoleRepository;
 import app.jaba.repositories.UserRepository;
 import app.jaba.repositories.UserRoleRepository;
-import jakarta.transaction.Transactional;
+import app.jaba.services.validations.CreateUserValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -29,13 +30,15 @@ public class UserService {
     AddressRepository addressRepository;
     UserRoleRepository userRoleRepository;
     RoleRepository roleRepository;
+    List<CreateUserValidation> validations;
 
     public UserEntity save(UserEntity userEntity) {
+        validations.forEach(validation -> validation.validate(userEntity));
+
         var userSaved = userRepository.save(userEntity)
                 .orElseThrow(() -> new SaveUserException("Error saving user"));
 
         saveAddress(userSaved);
-
         saveRoles(userSaved);
 
         return userSaved;

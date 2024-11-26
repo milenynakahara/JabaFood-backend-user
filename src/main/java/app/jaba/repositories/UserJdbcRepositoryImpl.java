@@ -66,4 +66,20 @@ public class UserJdbcRepositoryImpl implements UserRepository {
     public void deleteById(UUID id) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
+    @Override
+    public Optional<UserEntity> findByLogin(String login) {
+        return jdbcClient.sql("SELECT * FROM users WHERE login LIKE :login")
+                .param("login", login)
+                .query(UserEntity.class)
+                .optional();
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        return jdbcClient.sql("SELECT * FROM users WHERE email LIKE :email")
+                .param("email", email)
+                .query(UserEntity.class)
+                .optional();
+    }
 }
