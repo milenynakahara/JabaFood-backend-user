@@ -36,3 +36,9 @@ This is a backend system for a collaborative restaurant management platform deve
     ```sh
     docker-compose up --build
     ```
+
+3. Access the Swagger UI
+   After starting the application, you can access the Swagger UI at:
+    ```
+    http://localhost:8080/swagger-ui/index.html
+    ```
