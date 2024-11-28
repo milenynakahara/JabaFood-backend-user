@@ -6,10 +6,10 @@ import app.jaba.exceptions.SaveAddressException;
 import app.jaba.exceptions.SaveUserException;
 import app.jaba.exceptions.SaveUserRoleException;
 import app.jaba.repositories.AddressRepository;
-import app.jaba.repositories.RoleRepository;
 import app.jaba.repositories.UserRepository;
 import app.jaba.repositories.UserRoleRepository;
 import app.jaba.services.validations.CreateUserValidation;
+import app.jaba.services.validations.PageAndSizeValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -29,8 +28,8 @@ public class UserService {
     UserRepository userRepository;
     AddressRepository addressRepository;
     UserRoleRepository userRoleRepository;
-    RoleRepository roleRepository;
     List<CreateUserValidation> validations;
+    PageAndSizeValidation pageAndSizeValidation;
 
     public UserEntity save(UserEntity userEntity) {
         validations.forEach(validation -> validation.validate(userEntity));
@@ -68,30 +67,9 @@ public class UserService {
     }
 
     public List<UserEntity> findAll(int page, int size) {
+        pageAndSizeValidation.validate(page, size);
         int offset = (page - 1) * size;
-        List<UserEntity> userEntities = userRepository.findAll(size, offset);
-
-        userEntities.forEach(userEntity -> {
-            loadUserRoles(userEntity);
-            loadUserAddress(userEntity);
-        });
-
-        return userEntities;
+        return userRepository.findAll(size, offset);
     }
-
-    private void loadUserRoles(UserEntity userEntity) {
-        Set<UserRoleEntity> userRoleEntities = userRoleRepository.findByUserId(userEntity.getId());
-        for (UserRoleEntity userRoleEntity : userRoleEntities) {
-            roleRepository.findById(userRoleEntity.getRoleId())
-                    .ifPresent(roleEntity -> userEntity.getRoles().add(roleEntity));
-        }
-
-    }
-
-    private void loadUserAddress(UserEntity userEntity) {
-        addressRepository.findByUserId(userEntity.getId())
-                .ifPresent(userEntity::setAddress);
-    }
-
 
 }
