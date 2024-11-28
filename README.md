@@ -16,7 +16,7 @@ This is a backend system for a collaborative restaurant management platform deve
 - PostgreSQL
 - Docker, Docker Compose
 - Flyway
-- JPA/Hibernate
+- JDBC
 
 ## Prerequisites
 
