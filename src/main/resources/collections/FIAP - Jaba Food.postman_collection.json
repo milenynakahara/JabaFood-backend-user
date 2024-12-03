@@ -1,0 +1,48 @@
+{
+	"info": {
+		"_postman_id": "5e9e1244-d75d-4bdc-89ac-3f6f8b55e81a",
+		"name": "FIAP - Jaba Food",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9428245"
+	},
+	"item": [
+		{
+			"name": "Get All",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Roberto Carlos\",\n    \"login\": \"roberto.carlos5\",\n    \"email\": \"roberto.carlos5@jaba.com\",\n    \"password\": \"password123\",\n    \"roles\": [\n        \"CLIENT\",\n        \"OWNER\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
