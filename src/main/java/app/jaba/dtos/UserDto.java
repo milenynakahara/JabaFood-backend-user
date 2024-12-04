@@ -1,5 +1,6 @@
 package app.jaba.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.lang.NonNull;
 
@@ -7,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Data Transfer Object for User")
 public record UserDto(
         @Schema(description = "Unique identifier of the user", example = "04870a33-235f-4610-a74e-9e057c46a134", readOnly = true)
@@ -25,7 +27,7 @@ public record UserDto(
         String email,
 
         @NonNull
-        @Schema(description = "Password of the user", example = "password123", required = true)
+        @Schema(description = "Password of the user", example = "password123", writeOnly = true)
         String password,
 
         @Schema(description = "Roles assigned to the user")

@@ -11,5 +11,6 @@ public interface UserMapper {
     @Mapping(target = "lastUpdate", ignore = true)
     UserEntity map(UserDto userDto);
 
+    @Mapping(target = "password", ignore = true)
     UserDto map(UserEntity userEntity);
 }
