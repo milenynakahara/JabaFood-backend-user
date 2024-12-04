@@ -1,6 +1,8 @@
 spring:
   application:
     name: jaba-food-backend-user
+    version: @project.version@
+    description: @project.description@
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/jaba}
     username: ${DATABASE_USER:user}
@@ -11,6 +13,4 @@ spring:
     user: ${FLYWAY_DATABASE_USER:user}
     password: ${FLYWAY_DATABASE_PASSWORD:password}
     enabled: true
-
-
 
