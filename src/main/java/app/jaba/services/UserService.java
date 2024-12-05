@@ -2,12 +2,8 @@ package app.jaba.services;
 
 import app.jaba.entities.UserEntity;
 import app.jaba.entities.UserRoleEntity;
-import app.jaba.exceptions.SaveAddressException;
 import app.jaba.exceptions.SaveUserException;
-import app.jaba.exceptions.SaveUserRoleException;
-import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.UserRepository;
-import app.jaba.repositories.UserRoleRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +22,16 @@ import static lombok.AccessLevel.PRIVATE;
 @Transactional
 public class UserService {
     UserRepository userRepository;
-    AddressRepository addressRepository;
-    UserRoleRepository userRoleRepository;
+    AddressService addressService;
+    UserRoleService userRoleService;
     List<CreateUserValidation> validations;
     PageAndSizeValidation pageAndSizeValidation;
+
+    public List<UserEntity> findAll(int page, int size) {
+        pageAndSizeValidation.validate(page, size);
+        int offset = (page - 1) * size;
+        return userRepository.findAll(size, offset);
+    }
 
     public UserEntity save(UserEntity userEntity) {
         validations.forEach(validation -> validation.validate(userEntity));
@@ -50,26 +52,31 @@ public class UserService {
                         .userId(userSaved.getId())
                         .roleId(role.getId())
                         .build();
-                userRoleRepository.save(userRole)
-                        .orElseThrow(() -> new SaveUserRoleException("Error saving user role"));
+                userRoleService.save(userRole);
             });
         }
     }
 
     private void saveAddress(UserEntity userSaved) {
         var address = userSaved.getAddress();
-        if (address == null) {
-            return;
+        if (address != null) {
+            address.setUserId(userSaved.getId());
+            addressService.save(address);
         }
-        address.setUserId(userSaved.getId());
-        addressRepository.save(address)
-                .orElseThrow(() -> new SaveAddressException("Error saving address"));
     }
 
-    public List<UserEntity> findAll(int page, int size) {
-        pageAndSizeValidation.validate(page, size);
-        int offset = (page - 1) * size;
-        return userRepository.findAll(size, offset);
+    private void updateAddress(UserEntity userUpdated) {
+        var address = userUpdated.getAddress();
+        if (address != null) {
+            address.setUserId(userUpdated.getId());
+            addressService.update(address);
+        } else {
+            addressService.deleteByUserId(userUpdated.getId());
+        }
+    }
+
+    private void updateRoles(UserEntity userUpdated) {
+        userRoleService.update(userUpdated.getId(), userUpdated.getRoles());
     }
 
 }

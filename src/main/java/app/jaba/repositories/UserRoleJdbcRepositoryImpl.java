@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-public class UserRoleRepositoryImpl implements UserRoleRepository {
+public class UserRoleJdbcRepositoryImpl implements UserRoleRepository {
 
     JdbcClient jdbcClient;
 

@@ -68,4 +68,11 @@ public class AddressJdbcRepositoryImpl implements AddressRepository {
                 .query(AddressEntity.class)
                 .optional();
     }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        jdbcClient.sql("DELETE FROM addresses WHERE user_id = :user_id")
+                .param("user_id", userId)
+                .update();
+    }
 }
