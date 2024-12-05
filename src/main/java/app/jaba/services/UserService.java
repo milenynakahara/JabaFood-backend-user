@@ -8,8 +8,12 @@ import app.jaba.exceptions.UserNotFoundException;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
+import app.jaba.services.validations.UpdateUserValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -23,11 +27,13 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserService {
     UserRepository userRepository;
     AddressService addressService;
     UserRoleService userRoleService;
     List<CreateUserValidation> validations;
+    List<UpdateUserValidation> uppdateValidations;
     PageAndSizeValidation pageAndSizeValidation;
 
     public List<UserEntity> findAll(int page, int size) {
@@ -82,7 +88,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         userEntity.setId(id);
         userEntity.setPassword(userFound.getPassword());
-        validations.forEach(validation -> validation.validate(userEntity));
+        uppdateValidations.forEach(validation -> validation.validate(userEntity));
 
         var userUpdated = userRepository.update(userEntity)
                 .orElseThrow(() -> new UpdateUserException("Error updating user"));

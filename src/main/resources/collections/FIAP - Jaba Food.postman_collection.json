@@ -1,48 +1,97 @@
 {
 	"info": {
-		"_postman_id": "5e9e1244-d75d-4bdc-89ac-3f6f8b55e81a",
+		"_postman_id": "77412dba-ff12-4ff6-a075-92c8ef94cdd6",
 		"name": "FIAP - Jaba Food",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "9428245"
+		"_exporter_id": "4369674"
 	},
 	"item": [
 		{
-			"name": "Get All",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "POST",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Roberto Carlos\",\n    \"login\": \"roberto.carlos5\",\n    \"email\": \"roberto.carlos5@jaba.com\",\n    \"password\": \"password123\",\n    \"roles\": [\n        \"CLIENT\",\n        \"OWNER\"\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Users",
+			"item": [
+				{
+					"name": "GET All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"users"
-					]
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Carbone 2\",\n    \"login\": \"caca85V2\",\n    \"email\": \"monoxidocarbone2@gmail.com\",\n    \"password\": \"password123\",\n    \"roles\": [\n        \"CLIENT\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Carbone Teste Put\",\n    \"login\": \"caca85V2\",\n    \"email\": \"monoxidocarboneV4@gmail.com\",\n    \"password\": \"password123\",\n    \"roles\": [\n        \"OWNER\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/c7bd1b25-8920-4473-80d5-98380159c246",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"c7bd1b25-8920-4473-80d5-98380159c246"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
