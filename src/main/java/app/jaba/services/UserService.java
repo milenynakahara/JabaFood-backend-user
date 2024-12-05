@@ -1,15 +1,18 @@
 package app.jaba.services;
 
+import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.entities.UserRoleEntity;
 import app.jaba.exceptions.SaveAddressException;
 import app.jaba.exceptions.SaveUserException;
 import app.jaba.exceptions.SaveUserRoleException;
+import app.jaba.exceptions.UserNotFoundException;
 import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.UserRepository;
 import app.jaba.repositories.UserRoleRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
+import app.jaba.services.validations.updatepassword.UpdatePasswordValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -28,8 +32,9 @@ public class UserService {
     UserRepository userRepository;
     AddressRepository addressRepository;
     UserRoleRepository userRoleRepository;
-    List<CreateUserValidation> validations;
     PageAndSizeValidation pageAndSizeValidation;
+    List<CreateUserValidation> validations;
+    List<UpdatePasswordValidation> updatePasswordValidations;
 
     public UserEntity save(UserEntity userEntity) {
         validations.forEach(validation -> validation.validate(userEntity));
@@ -41,6 +46,17 @@ public class UserService {
         saveRoles(userSaved);
 
         return userSaved;
+    }
+
+    public UserEntity updatePassword(UUID id, UpdatePasswordEntity updatePasswordEntity) {
+        updatePasswordValidations.forEach(validation -> validation.validate(updatePasswordEntity));
+
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setPassword(updatePasswordEntity.getNewPassword());
+        return userRepository.save(user)
+                .orElseThrow(() -> new SaveUserException("Error saving user"));
     }
 
     private void saveRoles(UserEntity userSaved) {

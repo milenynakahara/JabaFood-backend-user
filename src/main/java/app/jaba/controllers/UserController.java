@@ -1,5 +1,6 @@
 package app.jaba.controllers;
 
+import app.jaba.dtos.UpdatePasswordDto;
 import app.jaba.dtos.UserDto;
 import app.jaba.mappers.UserMapper;
 import app.jaba.services.UserService;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -39,7 +41,18 @@ public class UserController {
     })
     @GetMapping
     public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "1") int page) {
-        return ResponseEntity.ok(userService.findAll(page,size).stream().map(userMapper::map).toList());
+        return ResponseEntity.ok(userService.findAll(page, size).stream().map(userMapper::map).toList());
+    }
+
+    // patch for update user password
+    @Operation(summary = "Update user password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User password updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<UserDto> updatePassword(@PathVariable("id") UUID id, @Validated @RequestBody UpdatePasswordDto updatePasswordDto) {
+        return ResponseEntity.ok(userMapper.map(userService.updatePassword(id, userMapper.map(updatePasswordDto))));
     }
 
 }
