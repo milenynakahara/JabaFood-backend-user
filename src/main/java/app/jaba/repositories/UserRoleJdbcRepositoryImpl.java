@@ -48,7 +48,7 @@ public class UserRoleJdbcRepositoryImpl implements UserRoleRepository {
     @Override
     public void deleteByUserId(UUID userId) {
         jdbcClient.sql("""
-                        DELETE FROM user_roles
+                        DELETE FROM users_roles
                         WHERE user_id = :user_id
                         """)
                 .param("user_id", userId)

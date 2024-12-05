@@ -4,6 +4,7 @@ import app.jaba.entities.UserEntity;
 import app.jaba.entities.UserRoleEntity;
 import app.jaba.exceptions.SaveUserException;
 import app.jaba.exceptions.UpdateUserException;
+import app.jaba.exceptions.UserNotFoundException;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -68,20 +70,18 @@ public class UserService {
     }
 
     private void updateAddress(UserEntity userUpdated) {
-        var address = userUpdated.getAddress();
-        if (address != null) {
-            address.setUserId(userUpdated.getId());
-            userUpdated.setAddress(addressService.update(address));
-        } else {
-            addressService.deleteByUserId(userUpdated.getId());
-        }
+        userUpdated.setAddress(addressService.update(userUpdated.getId(), userUpdated.getAddress()));
     }
 
     private void updateRoles(UserEntity userUpdated) {
         userRoleService.update(userUpdated.getId(), userUpdated.getRoles());
     }
 
-    public UserEntity update(UserEntity userEntity) {
+    public UserEntity update(UUID id, UserEntity userEntity) {
+        var userFound = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        userEntity.setId(id);
+        userEntity.setPassword(userFound.getPassword());
         validations.forEach(validation -> validation.validate(userEntity));
 
         var userUpdated = userRepository.update(userEntity)

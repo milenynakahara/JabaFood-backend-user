@@ -11,7 +11,7 @@ public class AddressMandatoryFieldValidation implements CreateAddressValidation 
 
     @Override
     public void validate(AddressEntity addressEntity) {
-        if (Objects.nonNull(addressEntity) && Objects.isNull(addressEntity.getUserId())) {
+        if (Objects.isNull(addressEntity.getUserId())) {
             throw new AddressMandatoryFieldException("User id is required");
         }
     }
