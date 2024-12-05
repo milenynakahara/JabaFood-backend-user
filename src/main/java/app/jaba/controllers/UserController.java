@@ -68,6 +68,7 @@ public class UserController {
     })
     @PatchMapping("/{id}/password")
     public ResponseEntity<UserDto> updatePassword(@PathVariable("id") UUID id, @Validated @RequestBody UpdatePasswordDto updatePasswordDto) {
+        log.info("Updating user password with id: {}", id);
         return ResponseEntity.ok(userMapper.map(userService.updatePassword(id, userMapper.map(updatePasswordDto))));
     }
 
