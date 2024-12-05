@@ -6,9 +6,6 @@ import app.jaba.entities.UserRoleEntity;
 import app.jaba.exceptions.SaveUserException;
 import app.jaba.exceptions.UpdateUserException;
 import app.jaba.exceptions.UserNotFoundException;
-import app.jaba.exceptions.SaveUserRoleException;
-import app.jaba.exceptions.UserNotFoundException;
-import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
@@ -34,7 +31,6 @@ public class UserService {
     UserRoleService userRoleService;
     List<CreateUserValidation> validations;
     PageAndSizeValidation pageAndSizeValidation;
-    List<CreateUserValidation> validations;
     List<UpdatePasswordValidation> updatePasswordValidations;
 
     public List<UserEntity> findAll(int page, int size) {
