@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex, request, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler({UserMandatoryFieldException.class, EmailFormatException.class, InvalidPageValueException.class, InvalidSizeValueException.class})
+    @ExceptionHandler({UserMandatoryFieldException.class, EmailFormatException.class, InvalidPageValueException.class, InvalidSizeValueException.class, AddressMandatoryFieldException.class})
     public ResponseEntity<ErrorResponseDto> handleMandatoryFieldException(RuntimeException ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
     }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Component
-public class UserMandatoryFieldValidation implements CreateUserValidation {
+public class UserMandatoryFieldValidation implements CreateUserValidation, UpdateUserValidation {
 
     @Override
     public void validate(UserEntity user) {

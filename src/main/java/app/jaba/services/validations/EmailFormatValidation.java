@@ -5,7 +5,7 @@ import app.jaba.exceptions.EmailFormatException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailFormatValidation implements CreateUserValidation {
+public class EmailFormatValidation implements CreateUserValidation, UpdateUserValidation {
 
     @Override
     public void validate(UserEntity user) {
