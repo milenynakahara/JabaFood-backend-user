@@ -7,6 +7,9 @@ import app.jaba.repositories.UserRoleRepository;
 import app.jaba.services.validations.CreateUserRoleValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -19,8 +22,8 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserRoleService {
-
     UserRoleRepository repository;
     List<CreateUserRoleValidation> validations;
 

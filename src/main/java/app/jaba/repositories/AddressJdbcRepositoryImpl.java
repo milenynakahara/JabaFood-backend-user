@@ -55,7 +55,16 @@ public class AddressJdbcRepositoryImpl implements AddressRepository {
     public Optional<AddressEntity> update(AddressEntity entity) {
         int result =
                 jdbcClient
-                        .sql("UPDATE addresses SET street = :street, city = :city, state = :state, zip = :zip, number = :number WHERE id = :id")
+                        .sql("""
+                            UPDATE addresses 
+                            SET 
+                                street = :street, 
+                                city = :city,
+                                state = :state,
+                                zip = :zip,
+                                number = :number 
+                            WHERE id = :id
+                        """)
                         .param("street", entity.getStreet())
                         .param("city", entity.getCity())
                         .param("state", entity.getState())
