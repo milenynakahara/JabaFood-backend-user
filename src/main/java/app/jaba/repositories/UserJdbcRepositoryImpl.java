@@ -147,4 +147,15 @@ public class UserJdbcRepositoryImpl implements UserRepository {
                 .optional();
     }
 
+    @Override
+    public Optional<UserEntity> updatePassword(UserEntity userEntity) {
+        int result = jdbcClient.sql("UPDATE users SET password = :password WHERE id = :id")
+                .param("password", userEntity.getPassword())
+                .param("id", userEntity.getId())
+                .update();
+        if (result == 1)
+            return Optional.of(userEntity);
+        return Optional.empty();
+    }
+
 }

@@ -3,9 +3,7 @@ package app.jaba.services;
 import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.entities.UserRoleEntity;
-import app.jaba.exceptions.SaveUserException;
-import app.jaba.exceptions.UpdateUserException;
-import app.jaba.exceptions.UserNotFoundException;
+import app.jaba.exceptions.*;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
@@ -33,7 +31,7 @@ public class UserService {
     AddressService addressService;
     UserRoleService userRoleService;
     List<CreateUserValidation> validations;
-    List<UpdateUserValidation> uppdateValidations;
+    List<UpdateUserValidation> updateUserValidations;
     PageAndSizeValidation pageAndSizeValidation;
     List<UpdatePasswordValidation> updatePasswordValidations;
 
@@ -55,15 +53,35 @@ public class UserService {
         return userSaved;
     }
 
+    public UserEntity update(UUID id, UserEntity userEntity) {
+        var userFound = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        userEntity.setId(id);
+        userEntity.setPassword(userFound.getPassword());
+        updateUserValidations.forEach(validation -> validation.validate(userEntity));
+
+        var userUpdated = userRepository.update(userEntity)
+                .orElseThrow(() -> new UpdateUserException("Error updating user"));
+
+        updateAddress(userUpdated);
+        updateRoles(userUpdated);
+
+        return userUpdated;
+    }
+
     public UserEntity updatePassword(UUID id, UpdatePasswordEntity updatePasswordEntity) {
         updatePasswordValidations.forEach(validation -> validation.validate(updatePasswordEntity));
 
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
+        if (!user.getPassword().equals(updatePasswordEntity.getOldPassword())) {
+            throw new InvalidPasswordException("The old password is invalid");
+        }
+
         user.setPassword(updatePasswordEntity.getNewPassword());
-        return userRepository.save(user)
-                .orElseThrow(() -> new SaveUserException("Error saving user"));
+        return userRepository.updatePassword(user)
+                .orElseThrow(() -> new UpdatePasswordException("Error updating password"));
     }
 
     private void saveRoles(UserEntity userSaved) {
@@ -95,19 +113,5 @@ public class UserService {
         userRoleService.update(userUpdated.getId(), userUpdated.getRoles());
     }
 
-    public UserEntity update(UUID id, UserEntity userEntity) {
-        var userFound = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-        userEntity.setId(id);
-        userEntity.setPassword(userFound.getPassword());
-        uppdateValidations.forEach(validation -> validation.validate(userEntity));
 
-        var userUpdated = userRepository.update(userEntity)
-                .orElseThrow(() -> new UpdateUserException("Error updating user"));
-
-        updateAddress(userUpdated);
-        updateRoles(userUpdated);
-
-        return userUpdated;
-    }
 }

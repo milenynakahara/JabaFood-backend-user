@@ -35,12 +35,37 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex, request, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler({UserMandatoryFieldException.class, EmailFormatException.class, InvalidPageValueException.class, InvalidSizeValueException.class, AddressMandatoryFieldException.class})
-    public ResponseEntity<ErrorResponseDto> handleMandatoryFieldException(RuntimeException ex, WebRequest request) {
+    @ExceptionHandler({
+            AddressNotFoundException.class,
+            RoleNotFoundException.class,
+            UserNotFoundException.class
+    })
+    public ResponseEntity<ErrorResponseDto> handleEntityNotFound(RuntimeException ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({
+            AddressMandatoryFieldException.class,
+            EmailFormatException.class,
+            InvalidPageValueException.class,
+            InvalidPasswordException.class,
+            InvalidSizeValueException.class,
+            MissingPasswordException.class,
+            PasswordNotMatchException.class,
+            UserMandatoryFieldException.class,
+            InvalidPasswordException.class,
+            UserMandatoryFieldException.class
+    })
+    public ResponseEntity<ErrorResponseDto> handleBadRequest(RuntimeException ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({SaveUserException.class, SaveUserRoleException.class, SaveAddressException.class})
+    @ExceptionHandler({
+            SaveUserException.class,
+            SaveUserRoleException.class,
+            SaveAddressException.class,
+            UpdatePasswordException.class
+    })
     public ResponseEntity<ErrorResponseDto> handleSaveException(RuntimeException ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
