@@ -3,13 +3,13 @@ package app.jaba.services;
 import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.entities.UserRoleEntity;
-import app.jaba.exceptions.SaveAddressException;
 import app.jaba.exceptions.SaveUserException;
+import app.jaba.exceptions.UpdateUserException;
+import app.jaba.exceptions.UserNotFoundException;
 import app.jaba.exceptions.SaveUserRoleException;
 import app.jaba.exceptions.UserNotFoundException;
 import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.UserRepository;
-import app.jaba.repositories.UserRoleRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
 import app.jaba.services.validations.updatepassword.UpdatePasswordValidation;
@@ -30,11 +30,18 @@ import static lombok.AccessLevel.PRIVATE;
 @Transactional
 public class UserService {
     UserRepository userRepository;
-    AddressRepository addressRepository;
-    UserRoleRepository userRoleRepository;
+    AddressService addressService;
+    UserRoleService userRoleService;
+    List<CreateUserValidation> validations;
     PageAndSizeValidation pageAndSizeValidation;
     List<CreateUserValidation> validations;
     List<UpdatePasswordValidation> updatePasswordValidations;
+
+    public List<UserEntity> findAll(int page, int size) {
+        pageAndSizeValidation.validate(page, size);
+        int offset = (page - 1) * size;
+        return userRepository.findAll(size, offset);
+    }
 
     public UserEntity save(UserEntity userEntity) {
         validations.forEach(validation -> validation.validate(userEntity));
@@ -61,31 +68,46 @@ public class UserService {
 
     private void saveRoles(UserEntity userSaved) {
         if (!CollectionUtils.isEmpty(userSaved.getRoles())) {
-            userSaved.getRoles().forEach(role -> {
-                var userRole = UserRoleEntity.builder()
-                        .userId(userSaved.getId())
-                        .roleId(role.getId())
-                        .build();
-                userRoleRepository.save(userRole)
-                        .orElseThrow(() -> new SaveUserRoleException("Error saving user role"));
-            });
+            userSaved.getRoles()
+                    .forEach(role -> {
+                        var userRole = UserRoleEntity.builder()
+                                .userId(userSaved.getId())
+                                .roleId(role.getId())
+                                .build();
+                        userRoleService.save(userRole);
+                    });
         }
     }
 
     private void saveAddress(UserEntity userSaved) {
         var address = userSaved.getAddress();
-        if (address == null) {
-            return;
+        if (address != null) {
+            address.setUserId(userSaved.getId());
+            userSaved.setAddress(addressService.save(address));
         }
-        address.setUserId(userSaved.getId());
-        addressRepository.save(address)
-                .orElseThrow(() -> new SaveAddressException("Error saving address"));
     }
 
-    public List<UserEntity> findAll(int page, int size) {
-        pageAndSizeValidation.validate(page, size);
-        int offset = (page - 1) * size;
-        return userRepository.findAll(size, offset);
+    private void updateAddress(UserEntity userUpdated) {
+        userUpdated.setAddress(addressService.update(userUpdated.getId(), userUpdated.getAddress()));
     }
 
+    private void updateRoles(UserEntity userUpdated) {
+        userRoleService.update(userUpdated.getId(), userUpdated.getRoles());
+    }
+
+    public UserEntity update(UUID id, UserEntity userEntity) {
+        var userFound = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        userEntity.setId(id);
+        userEntity.setPassword(userFound.getPassword());
+        validations.forEach(validation -> validation.validate(userEntity));
+
+        var userUpdated = userRepository.update(userEntity)
+                .orElseThrow(() -> new UpdateUserException("Error updating user"));
+
+        updateAddress(userUpdated);
+        updateRoles(userUpdated);
+
+        return userUpdated;
+    }
 }

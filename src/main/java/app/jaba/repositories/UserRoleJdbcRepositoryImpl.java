@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-public class UserRoleRepositoryImpl implements UserRoleRepository {
+public class UserRoleJdbcRepositoryImpl implements UserRoleRepository {
 
     JdbcClient jdbcClient;
 
@@ -48,7 +48,7 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
     @Override
     public void deleteByUserId(UUID userId) {
         jdbcClient.sql("""
-                        DELETE FROM user_roles
+                        DELETE FROM users_roles
                         WHERE user_id = :user_id
                         """)
                 .param("user_id", userId)

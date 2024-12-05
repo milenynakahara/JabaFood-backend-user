@@ -31,10 +31,10 @@ public class AddressJdbcRepositoryImpl implements AddressRepository {
     public Optional<AddressEntity> save(AddressEntity entity) {
         UUID id = UUID.randomUUID();
         int result = jdbcClient.sql("""
-                        INSERT INTO addresses (id, street, city, state, zip, number, user_id)
-                        VALUES 
-                        (:id, :street, :city, :state, :zip, :number, :user_id)
-                        """)
+                                            INSERT INTO addresses (id, street, city, state, zip, number, user_id)
+                                            VALUES 
+                                            (:id, :street, :city, :state, :zip, :number, :user_id)
+                                            """)
                 .param("id", id)
                 .param("street", entity.getStreet())
                 .param("city", entity.getCity())
@@ -53,9 +53,23 @@ public class AddressJdbcRepositoryImpl implements AddressRepository {
 
     @Override
     public Optional<AddressEntity> update(AddressEntity entity) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+        int result =
+                jdbcClient
+                        .sql("UPDATE addresses SET street = :street, city = :city, state = :state, zip = :zip, number = :number WHERE id = :id")
+                        .param("street", entity.getStreet())
+                        .param("city", entity.getCity())
+                        .param("state", entity.getState())
+                        .param("zip", entity.getZip())
+                        .param("number", entity.getNumber())
+                        .param("id", entity.getId())
+                        .update();
 
+        if (result != 1)
+            return Optional.empty();
+
+        return Optional.of(entity);
+    }
+    
     @Override
     public void deleteById(UUID id) {
         throw new UnsupportedOperationException("Not implemented yet");
@@ -67,5 +81,12 @@ public class AddressJdbcRepositoryImpl implements AddressRepository {
                 .param("user_id", userId)
                 .query(AddressEntity.class)
                 .optional();
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        jdbcClient.sql("DELETE FROM addresses WHERE user_id = :user_id")
+                .param("user_id", userId)
+                .update();
     }
 }

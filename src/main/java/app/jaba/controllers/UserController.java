@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
+@Slf4j
 public class UserController {
 
     UserService userService;
@@ -32,6 +34,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserDto> create(@Validated @RequestBody UserDto userDto) {
+        log.info("Creating user: {}", userDto);
         return ResponseEntity.ok(userMapper.map(userService.save(userMapper.map(userDto))));
     }
 
@@ -41,10 +44,23 @@ public class UserController {
     })
     @GetMapping
     public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "1") int page) {
-        return ResponseEntity.ok(userService.findAll(page, size).stream().map(userMapper::map).toList());
+        log.info("Finding all users");
+        return ResponseEntity.ok(userService.findAll(page, size)
+                .stream()
+                .map(userMapper::map)
+                .toList());
     }
 
-    // patch for update user password
+    @Operation(summary = "Update a user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User updated successfully")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+        log.info("Updating user with id: {}", id);
+        return ResponseEntity.ok(userMapper.map(userService.update(id, userMapper.map(userDto))));
+    }
+
     @Operation(summary = "Update user password")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User password updated successfully"),
