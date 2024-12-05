@@ -109,7 +109,21 @@ public class UserJdbcRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> update(UserEntity userEntity) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        LocalDateTime lastUpdate = LocalDateTime.now();
+        int result = this.jdbcClient
+                .sql("UPDATE users SET name = :name, login = :login, email = :email, last_update = :last_update WHERE id = :id")
+                .param("name", userEntity.getName())
+                .param("login", userEntity.getLogin())
+                .param("email", userEntity.getEmail())
+                .param("last_update", lastUpdate)
+                .param("id", userEntity.getId())
+                .update();
+
+        if (result != 1)
+            return Optional.empty();
+
+        userEntity.setLastUpdate(lastUpdate);
+        return Optional.of(userEntity);
     }
 
     @Override
@@ -132,4 +146,5 @@ public class UserJdbcRepositoryImpl implements UserRepository {
                 .query(UserEntity.class)
                 .optional();
     }
+
 }

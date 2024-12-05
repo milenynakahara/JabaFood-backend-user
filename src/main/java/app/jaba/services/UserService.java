@@ -3,6 +3,7 @@ package app.jaba.services;
 import app.jaba.entities.UserEntity;
 import app.jaba.entities.UserRoleEntity;
 import app.jaba.exceptions.SaveUserException;
+import app.jaba.exceptions.UpdateUserException;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
@@ -47,13 +48,14 @@ public class UserService {
 
     private void saveRoles(UserEntity userSaved) {
         if (!CollectionUtils.isEmpty(userSaved.getRoles())) {
-            userSaved.getRoles().forEach(role -> {
-                var userRole = UserRoleEntity.builder()
-                        .userId(userSaved.getId())
-                        .roleId(role.getId())
-                        .build();
-                userRoleService.save(userRole);
-            });
+            userSaved.getRoles()
+                    .forEach(role -> {
+                        var userRole = UserRoleEntity.builder()
+                                .userId(userSaved.getId())
+                                .roleId(role.getId())
+                                .build();
+                        userRoleService.save(userRole);
+                    });
         }
     }
 
@@ -61,7 +63,7 @@ public class UserService {
         var address = userSaved.getAddress();
         if (address != null) {
             address.setUserId(userSaved.getId());
-            addressService.save(address);
+            userSaved.setAddress(addressService.save(address));
         }
     }
 
@@ -69,7 +71,7 @@ public class UserService {
         var address = userUpdated.getAddress();
         if (address != null) {
             address.setUserId(userUpdated.getId());
-            addressService.update(address);
+            userUpdated.setAddress(addressService.update(address));
         } else {
             addressService.deleteByUserId(userUpdated.getId());
         }
@@ -79,4 +81,15 @@ public class UserService {
         userRoleService.update(userUpdated.getId(), userUpdated.getRoles());
     }
 
+    public UserEntity update(UserEntity userEntity) {
+        validations.forEach(validation -> validation.validate(userEntity));
+
+        var userUpdated = userRepository.update(userEntity)
+                .orElseThrow(() -> new UpdateUserException("Error updating user"));
+
+        updateAddress(userUpdated);
+        updateRoles(userUpdated);
+
+        return userUpdated;
+    }
 }

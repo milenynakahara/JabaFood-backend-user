@@ -1,6 +1,7 @@
 package app.jaba.controllers;
 
 import app.jaba.dtos.UserDto;
+import app.jaba.entities.UserEntity;
 import app.jaba.mappers.UserMapper;
 import app.jaba.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -39,7 +41,21 @@ public class UserController {
     })
     @GetMapping
     public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "1") int page) {
-        return ResponseEntity.ok(userService.findAll(page,size).stream().map(userMapper::map).toList());
+        return ResponseEntity.ok(userService.findAll(page, size)
+                                         .stream()
+                                         .map(userMapper::map)
+                                         .toList());
+    }
+
+    @Operation(summary = "Update a user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User updated successfully")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> update(@PathVariable UUID id, @RequestBody UserDto userDto) {
+        UserEntity userEntity = userMapper.map(userDto);
+        userEntity.setId(id);
+        return ResponseEntity.ok(userMapper.map(userService.update(userMapper.map(userDto))));
     }
 
 }
