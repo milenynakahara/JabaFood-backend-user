@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "86313e0c-6149-4515-9e73-2a1d18eaecdd",
+		"_postman_id": "26cf376c-fdf9-4cc8-bb15-193702152f50",
 		"name": "FIAP - Jaba Food App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "9428245"
@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"roles\": [\n\t\t\"CLIENT\",\n\t\t\"OWNER\"\n\t],\n\t\"address\": {\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t}\n}",
+							"raw": "{\n    \"id\": \"b7533d11-5eae-4023-9d63-154b65e36451\",\n    \"name\": \"Roberto Carlos\",\n    \"login\": \"roberto.carlos21\",\n    \"email\": \"roberto.carlos21@jaba.com\",\n    \"address\": {\n        \"id\": \"f067c52a-4e20-4c1c-8d61-2a7d8687525a\",\n        \"street\": \"Rua das Flores\",\n        \"city\": \"Rio de Janeiro\",\n        \"state\": \"RJ\",\n        \"zip\": \"50712-432\",\n        \"number\": \"13\"\n    }\n}",
 							"options": {
 								"raw": {
 									"headerFamily": "json",
@@ -47,7 +47,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "59e2abaa-b82d-faea-5a75-2e553c8922d9",
+									"value": "b7533d11-5eae-4023-9d63-154b65e36451",
 									"description": "(Required) "
 								}
 							]
@@ -70,7 +70,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"roles\": [\n\t\t\"CLIENT\",\n\t\t\"OWNER\"\n\t],\n\t\"address\": {\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t}\n}",
+									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\"\n\t}\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -106,7 +106,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"roles\": [\n\t\t\"OWNER\",\n\t\t\"CLIENT\"\n\t],\n\t\"address\": {\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
 						}
 					]
 				},
@@ -185,7 +185,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n\t{\n\t\t\"email\": \"roberto.carlos@jaba.com\",\n\t\t\"login\": \"roberto.carlos\",\n\t\t\"name\": \"Roberto Carlos\",\n\t\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\t\"roles\": [\n\t\t\t\"OWNER\",\n\t\t\t\"CLIENT\"\n\t\t],\n\t\t\"address\": {\n\t\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\t\"street\": \"Rua das Flores\",\n\t\t\t\"city\": \"Rio de Janeiro\",\n\t\t\t\"state\": \"RJ\",\n\t\t\t\"zip\": \"50712-432\",\n\t\t\t\"number\": \"13\"\n\t\t},\n\t\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n\t},\n\t{\n\t\t\"email\": \"roberto.carlos@jaba.com\",\n\t\t\"login\": \"roberto.carlos\",\n\t\t\"name\": \"Roberto Carlos\",\n\t\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\t\"roles\": [\n\t\t\t\"CLIENT\",\n\t\t\t\"OWNER\"\n\t\t],\n\t\t\"address\": {\n\t\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\t\"street\": \"Rua das Flores\",\n\t\t\t\"city\": \"Rio de Janeiro\",\n\t\t\t\"state\": \"RJ\",\n\t\t\t\"zip\": \"50712-432\",\n\t\t\t\"number\": \"13\"\n\t\t},\n\t\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n\t}\n]"
+							"body": "[\n\t{\n\t\t\"email\": \"roberto.carlos@jaba.com\",\n\t\t\"login\": \"roberto.carlos\",\n\t\t\"name\": \"Roberto Carlos\",\n\t\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\t\"address\": {\n\t\t\t\"city\": \"Rio de Janeiro\",\n\t\t\t\"number\": \"13\",\n\t\t\t\"state\": \"RJ\",\n\t\t\t\"street\": \"Rua das Flores\",\n\t\t\t\"zip\": \"50712-432\",\n\t\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t\t},\n\t\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n\t},\n\t{\n\t\t\"email\": \"roberto.carlos@jaba.com\",\n\t\t\"login\": \"roberto.carlos\",\n\t\t\"name\": \"Roberto Carlos\",\n\t\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\t\"address\": {\n\t\t\t\"city\": \"Rio de Janeiro\",\n\t\t\t\"number\": \"13\",\n\t\t\t\"state\": \"RJ\",\n\t\t\t\"street\": \"Rua das Flores\",\n\t\t\t\"zip\": \"50712-432\",\n\t\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t\t},\n\t\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n\t}\n]"
 						}
 					]
 				},
@@ -205,7 +205,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"roberto.carlos20@jaba.com\",\n\t\"login\": \"roberto.carlos20\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"roles\": [\n\t\t\"CLIENT\",\n\t\t\"OWNER\"\n\t],\n\t\"address\": {\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t}\n}",
+							"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"headerFamily": "json",
@@ -242,7 +242,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"roles\": [\n\t\t\"CLIENT\",\n\t\t\"OWNER\"\n\t],\n\t\"address\": {\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t}\n}",
+									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\"\n\t}\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -272,7 +272,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"roles\": [\n\t\t\"OWNER\",\n\t\t\"CLIENT\"\n\t],\n\t\"address\": {\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
 						},
 						{
 							"name": "Invalid input",
@@ -290,7 +290,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"roles\": [\n\t\t\"CLIENT\",\n\t\t\"OWNER\"\n\t],\n\t\"address\": {\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t}\n}",
+									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\"\n\t}\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -320,7 +320,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"roles\": [\n\t\t\"OWNER\",\n\t\t\"CLIENT\"\n\t],\n\t\"address\": {\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
 						}
 					]
 				},
@@ -363,7 +363,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "58c409ff-8425-4cfd-aa58-d2baa68a55a7",
+									"value": "4af9c844-9f8c-476d-9005-c203e6f9780c",
 									"description": "(Required) "
 								}
 							]
@@ -423,7 +423,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"roles\": [\n\t\t\"OWNER\",\n\t\t\"CLIENT\"\n\t],\n\t\"address\": {\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
 						},
 						{
 							"name": "Invalid input",
@@ -478,7 +478,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"roles\": [\n\t\t\"OWNER\",\n\t\t\"CLIENT\"\n\t],\n\t\"address\": {\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"state\": \"RJ\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"number\": \"13\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
 						}
 					]
 				}

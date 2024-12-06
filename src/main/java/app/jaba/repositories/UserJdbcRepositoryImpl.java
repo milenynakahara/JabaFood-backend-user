@@ -21,10 +21,7 @@ public class UserJdbcRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> findById(UUID id) {
-        return jdbcClient.sql("SELECT * FROM users WHERE id = :id")
-                .param("id", id)
-                .query(UserEntity.class)
-                .optional();
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
