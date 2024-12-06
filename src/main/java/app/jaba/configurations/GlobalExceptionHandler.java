@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             AddressNotFoundException.class,
-            RoleNotFoundException.class,
             UserNotFoundException.class
     })
     public ResponseEntity<ErrorResponseDto> handleEntityNotFound(RuntimeException ex, WebRequest request) {
@@ -62,7 +61,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             SaveUserException.class,
-            SaveUserRoleException.class,
             SaveAddressException.class,
             UpdatePasswordException.class
     })

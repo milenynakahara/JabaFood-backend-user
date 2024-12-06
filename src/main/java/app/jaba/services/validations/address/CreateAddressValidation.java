@@ -1,4 +1,4 @@
-package app.jaba.services.validations;
+package app.jaba.services.validations.address;
 
 import app.jaba.entities.AddressEntity;
 

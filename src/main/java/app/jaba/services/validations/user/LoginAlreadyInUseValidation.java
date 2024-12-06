@@ -1,7 +1,7 @@
-package app.jaba.services.validations;
+package app.jaba.services.validations.user;
 
 import app.jaba.entities.UserEntity;
-import app.jaba.exceptions.EmailAlreadyInUseException;
+import app.jaba.exceptions.LoginAlreadyInUseException;
 import app.jaba.repositories.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +13,15 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class EmailAlreadyInUseValidation implements CreateUserValidation, UpdateUserValidation {
+public class LoginAlreadyInUseValidation implements CreateUserValidation {
 
     UserRepository userRepository;
 
     @Override
     public void validate(UserEntity user) {
-        userRepository.findByEmail(user.getEmail()).ifPresent(u -> {
+        userRepository.findByLogin(user.getLogin()).ifPresent(u -> {
             if (!Objects.equals(u.getId(), user.getId())) {
-                throw new EmailAlreadyInUseException("Email already in use");
+                throw new LoginAlreadyInUseException("Login already in use");
             }
         });
     }

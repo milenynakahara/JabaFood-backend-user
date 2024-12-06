@@ -1,14 +1,13 @@
 package app.jaba.services;
 
 import app.jaba.entities.AddressEntity;
+import app.jaba.exceptions.AddressMandatoryFieldException;
 import app.jaba.exceptions.SaveAddressException;
 import app.jaba.repositories.AddressRepository;
-import app.jaba.services.validations.CreateAddressValidation;
+import app.jaba.services.validations.address.CreateAddressValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Service
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-@Transactional@Slf4j
+@Transactional
+@Slf4j
 
 public class AddressService {
     AddressRepository repository;
@@ -34,25 +34,19 @@ public class AddressService {
     }
 
     public AddressEntity update(UUID userId, AddressEntity addressEntity) {
-        validations.forEach(validation -> validation.validate(AddressEntity.builder().userId(userId).build()));
+        if (Objects.isNull(userId)) {
+            throw new AddressMandatoryFieldException("User id is required");
+        }
 
         if (Objects.isNull(addressEntity)) {
-            repository.deleteByUserId(userId);
-            return addressEntity;
+            throw new AddressMandatoryFieldException("Address is required");
         }
-
         addressEntity.setUserId(userId);
-        var address = repository.findByUserId(userId);
-        if (address.isEmpty()) {
-            return save(addressEntity);
-        }
+        validations.forEach(validation -> validation.validate(addressEntity));
 
+        addressEntity.setId(repository.findByUserId(userId).map(AddressEntity::getId).orElse(null));
         return repository.update(addressEntity)
                 .orElseThrow(() -> new SaveAddressException("Error updating address"));
-    }
-
-    public void deleteByUserId(UUID userId) {
-        repository.deleteByUserId(userId);
     }
 
 }

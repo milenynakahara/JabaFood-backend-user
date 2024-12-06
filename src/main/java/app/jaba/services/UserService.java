@@ -2,19 +2,17 @@ package app.jaba.services;
 
 import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
-import app.jaba.entities.UserRoleEntity;
 import app.jaba.exceptions.*;
 import app.jaba.repositories.UserRepository;
-import app.jaba.services.validations.CreateUserValidation;
 import app.jaba.services.validations.PageAndSizeValidation;
-import app.jaba.services.validations.UpdateUserValidation;
+import app.jaba.services.validations.user.UpdateUserValidation;
 import app.jaba.services.validations.updatepassword.UpdatePasswordValidation;
+import app.jaba.services.validations.user.CreateUserValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +27,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class UserService {
     UserRepository userRepository;
     AddressService addressService;
-    UserRoleService userRoleService;
     List<CreateUserValidation> validations;
     List<UpdateUserValidation> updateUserValidations;
     PageAndSizeValidation pageAndSizeValidation;
@@ -48,7 +45,6 @@ public class UserService {
                 .orElseThrow(() -> new SaveUserException("Error saving user"));
 
         saveAddress(userSaved);
-        saveRoles(userSaved);
 
         return userSaved;
     }
@@ -64,7 +60,6 @@ public class UserService {
                 .orElseThrow(() -> new UpdateUserException("Error updating user"));
 
         updateAddress(userUpdated);
-        updateRoles(userUpdated);
 
         return userUpdated;
     }
@@ -84,19 +79,6 @@ public class UserService {
                 .orElseThrow(() -> new UpdatePasswordException("Error updating password"));
     }
 
-    private void saveRoles(UserEntity userSaved) {
-        if (!CollectionUtils.isEmpty(userSaved.getRoles())) {
-            userSaved.getRoles()
-                    .forEach(role -> {
-                        var userRole = UserRoleEntity.builder()
-                                .userId(userSaved.getId())
-                                .roleId(role.getId())
-                                .build();
-                        userRoleService.save(userRole);
-                    });
-        }
-    }
-
     private void saveAddress(UserEntity userSaved) {
         var address = userSaved.getAddress();
         if (address != null) {
@@ -108,10 +90,5 @@ public class UserService {
     private void updateAddress(UserEntity userUpdated) {
         userUpdated.setAddress(addressService.update(userUpdated.getId(), userUpdated.getAddress()));
     }
-
-    private void updateRoles(UserEntity userUpdated) {
-        userRoleService.update(userUpdated.getId(), userUpdated.getRoles());
-    }
-
 
 }

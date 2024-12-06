@@ -6,7 +6,6 @@ import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Data Transfer Object for User")
@@ -29,9 +28,6 @@ public record UserDto(
         @NonNull
         @Schema(description = "Password of the user", example = "password123", writeOnly = true)
         String password,
-
-        @Schema(description = "Roles assigned to the user")
-        Set<RoleDto> roles,
 
         @Schema(description = "Address of the user")
         AddressDto address,
