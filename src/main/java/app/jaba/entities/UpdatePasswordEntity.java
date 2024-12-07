@@ -1,19 +1,18 @@
 package app.jaba.entities;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.UUID;
+import static lombok.AccessLevel.PRIVATE;
 
+@Data
+@FieldDefaults(level = PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleEntity {
-
-    UUID id;
-    String name;
+public class UpdatePasswordEntity {
+    String oldPassword;
+    String newPassword;
+    String repeatNewPassword;
 }

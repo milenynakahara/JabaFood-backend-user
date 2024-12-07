@@ -1,4 +1,4 @@
-package app.jaba.services.validations;
+package app.jaba.services.validations.user;
 
 import app.jaba.entities.UserEntity;
 

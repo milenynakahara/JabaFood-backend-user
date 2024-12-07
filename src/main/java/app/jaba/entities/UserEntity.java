@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -23,7 +21,6 @@ public class UserEntity {
     String login;
     String email;
     String password;
-    Set<RoleEntity> roles = new HashSet<>();
     LocalDateTime lastUpdate;
     AddressEntity address;
 

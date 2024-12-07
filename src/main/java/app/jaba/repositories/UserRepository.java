@@ -11,6 +11,8 @@ public interface UserRepository extends Repository<UserEntity> {
 
     Optional<UserEntity> findByEmail(String email);
 
-    Optional<UserEntity> update(UserEntity userEntity);
+    Optional<UserEntity> updatePassword(UserEntity userEntity);
+
+    void deleteById(UUID id);
 
 }

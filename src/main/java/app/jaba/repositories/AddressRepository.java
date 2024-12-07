@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface AddressRepository extends Repository<AddressEntity> {
     Optional<AddressEntity> findByUserId(UUID userId);
-    void deleteByUserId(UUID userId);
 }

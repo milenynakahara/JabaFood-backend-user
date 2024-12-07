@@ -1,7 +1,7 @@
-package app.jaba.services.validations;
+package app.jaba.services.validations.user;
 
 import app.jaba.entities.UserEntity;
-import app.jaba.exceptions.LoginAlreadyInUseException;
+import app.jaba.exceptions.EmailAlreadyInUseException;
 import app.jaba.repositories.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +13,16 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class CheckLoginUpdateValidation implements UpdateUserValidation {
+public class EmailAlreadyInUseValidation implements CreateUserValidation, UpdateUserValidation {
 
     UserRepository userRepository;
 
     @Override
     public void validate(UserEntity user) {
-        // TODO: VALIDAR SE O LOGIN É O MESMO DURANTE ATUALIZACAO E NAO PODE SER DIFERENTE
+        userRepository.findByEmail(user.getEmail()).ifPresent(u -> {
+            if (!Objects.equals(u.getId(), user.getId())) {
+                throw new EmailAlreadyInUseException("Email already in use");
+            }
+        });
     }
 }

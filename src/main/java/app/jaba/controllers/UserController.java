@@ -1,11 +1,13 @@
 package app.jaba.controllers;
 
+import app.jaba.dtos.UpdatePasswordDto;
 import app.jaba.dtos.UserDto;
 import app.jaba.mappers.UserMapper;
 import app.jaba.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 @Slf4j
+@Tag(name = "User", description = "User API")
 public class UserController {
 
     UserService userService;
@@ -60,4 +63,25 @@ public class UserController {
         return ResponseEntity.ok(userMapper.map(userService.update(id, userMapper.map(userDto))));
     }
 
+    @Operation(summary = "Update user password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User password updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<UserDto> updatePassword(@PathVariable("id") UUID id, @Validated @RequestBody UpdatePasswordDto updatePasswordDto) {
+        log.info("Updating user password with id: {}", id);
+        return ResponseEntity.ok(userMapper.map(userService.updatePassword(id, userMapper.map(updatePasswordDto))));
+    }
+
+    @Operation(summary="Delete a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+        log.info("Deleting user with id: {}", id);
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

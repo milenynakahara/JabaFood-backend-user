@@ -1,13 +1,11 @@
 package app.jaba.repositories;
 
 import app.jaba.entities.AddressEntity;
-import app.jaba.entities.RoleEntity;
 import app.jaba.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,12 +28,9 @@ public class UserJdbcRepositoryImpl implements UserRepository {
     public List<UserEntity> findAll(int size, int offset) {
         String sql = """
                     SELECT u.id AS user_id, u.name AS user_name, u.login AS user_login, u.email AS user_email, u.password AS user_password, u.last_update AS user_last_update,
-                           a.id AS address_id, a.street AS address_street, a.city AS address_city, a.state AS address_state, a.zip AS address_zip, a.number AS address_number,
-                           STRING_AGG(r.id::text, ',') AS role_ids, STRING_AGG(r.name, ',') AS role_names
+                           a.id AS address_id, a.street AS address_street, a.city AS address_city, a.state AS address_state, a.zip AS address_zip, a.number AS address_number
                     FROM users u
                     LEFT JOIN addresses a ON u.id = a.user_id
-                    LEFT JOIN users_roles ur ON u.id = ur.user_id
-                    LEFT JOIN roles r ON ur.role_id = r.id
                     GROUP BY u.id, a.id
                     LIMIT :size OFFSET :offset
                 """;
@@ -63,19 +58,6 @@ public class UserJdbcRepositoryImpl implements UserRepository {
                         address.setNumber(rs.getString("address_number"));
                         user.setAddress(address);
                     }
-
-                    var roleIds = rs.getString("role_ids");
-                    if (StringUtils.hasText(roleIds)) {
-                        String[] roleIdsArray = roleIds.split(",");
-                        String[] roleNames = rs.getString("role_names").split(",");
-                        for (int i = 0; i < roleIdsArray.length; i++) {
-                            RoleEntity role = new RoleEntity();
-                            role.setId(UUID.fromString(roleIdsArray[i]));
-                            role.setName(roleNames[i]);
-                            user.getRoles().add(role);
-                        }
-                    }
-
 
                     return user;
                 })
@@ -128,8 +110,11 @@ public class UserJdbcRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteById(UUID id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        jdbcClient.sql("DELETE FROM users WHERE id = :id")
+                .param("id", id)
+                .update();
     }
+
 
     @Override
     public Optional<UserEntity> findByLogin(String login) {
@@ -145,6 +130,17 @@ public class UserJdbcRepositoryImpl implements UserRepository {
                 .param("email", email)
                 .query(UserEntity.class)
                 .optional();
+    }
+
+    @Override
+    public Optional<UserEntity> updatePassword(UserEntity userEntity) {
+        int result = jdbcClient.sql("UPDATE users SET password = :password WHERE id = :id")
+                .param("password", userEntity.getPassword())
+                .param("id", userEntity.getId())
+                .update();
+        if (result == 1)
+            return Optional.of(userEntity);
+        return Optional.empty();
     }
 
 }
