@@ -45,7 +45,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
     })
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "0") int page) {
         log.info("Finding all users");
         return ResponseEntity.ok(userService.findAll(page, size)
                 .stream()
