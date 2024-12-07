@@ -3,12 +3,11 @@ package app.jaba.services;
 import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.exceptions.*;
-import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.PageAndSizeValidation;
-import app.jaba.services.validations.user.UpdateUserValidation;
 import app.jaba.services.validations.updatepassword.UpdatePasswordValidation;
 import app.jaba.services.validations.user.CreateUserValidation;
+import app.jaba.services.validations.user.UpdateUserValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Slf4j
 public class UserService {
     UserRepository userRepository;
-    AddressRepository addressRepository;
     AddressService addressService;
     List<CreateUserValidation> validations;
     List<UpdateUserValidation> updateUserValidations;
@@ -36,7 +34,7 @@ public class UserService {
 
     public List<UserEntity> findAll(int page, int size) {
         pageAndSizeValidation.validate(page, size);
-        int offset = (page - 1) * size;
+        int offset = page > 0 ? (page - 1) * size : 0;
         return userRepository.findAll(size, offset);
     }
 

@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS addresses (
     zip VARCHAR(255) NOT NULL,
     number VARCHAR(255) NOT NULL,
     user_id UUID NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
