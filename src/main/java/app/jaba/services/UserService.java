@@ -3,6 +3,7 @@ package app.jaba.services;
 import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.exceptions.*;
+import app.jaba.repositories.AddressRepository;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.PageAndSizeValidation;
 import app.jaba.services.validations.user.UpdateUserValidation;
@@ -26,6 +27,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Slf4j
 public class UserService {
     UserRepository userRepository;
+    AddressRepository addressRepository;
     AddressService addressService;
     List<CreateUserValidation> validations;
     List<UpdateUserValidation> updateUserValidations;
@@ -89,6 +91,12 @@ public class UserService {
 
     private void updateAddress(UserEntity userUpdated) {
         userUpdated.setAddress(addressService.update(userUpdated.getId(), userUpdated.getAddress()));
+    }
+
+    public void deleteById(UUID id) {
+        var userFound = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        userRepository.deleteById(userFound.getId());
     }
 
 }

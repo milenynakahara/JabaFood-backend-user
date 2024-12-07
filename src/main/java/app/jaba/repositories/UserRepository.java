@@ -3,6 +3,7 @@ package app.jaba.repositories;
 import app.jaba.entities.UserEntity;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository extends Repository<UserEntity> {
 
@@ -11,5 +12,7 @@ public interface UserRepository extends Repository<UserEntity> {
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> updatePassword(UserEntity userEntity);
+
+    void deleteById(UUID id);
 
 }

@@ -110,8 +110,11 @@ public class UserJdbcRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteById(UUID id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        jdbcClient.sql("DELETE FROM users WHERE id = :id")
+                .param("id", id)
+                .update();
     }
+
 
     @Override
     public Optional<UserEntity> findByLogin(String login) {

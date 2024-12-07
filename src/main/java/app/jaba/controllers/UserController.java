@@ -74,4 +74,14 @@ public class UserController {
         return ResponseEntity.ok(userMapper.map(userService.updatePassword(id, userMapper.map(updatePasswordDto))));
     }
 
+    @Operation(summary="Delete a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
+        log.info("Deleting user with id: {}", id);
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
