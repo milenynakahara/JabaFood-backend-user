@@ -1,7 +1,8 @@
 package app.jaba.repositories;
 
-import app.jaba.entities.AddressEntity;
 import app.jaba.entities.UserEntity;
+import app.jaba.mappers.AddressMapper;
+import app.jaba.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -18,6 +19,8 @@ import java.util.UUID;
 public class UserJdbcRepositoryImpl implements UserRepository {
 
     JdbcClient jdbcClient;
+    UserMapper userMapper;
+    AddressMapper addressMapper;
 
     @Override
     public Optional<UserEntity> findById(UUID id) {
@@ -39,26 +42,8 @@ public class UserJdbcRepositoryImpl implements UserRepository {
                 .param("size", size)
                 .param("offset", offset)
                 .query((rs, rowNum) -> {
-                    UserEntity user = new UserEntity();
-                    user.setId(rs.getObject("user_id", UUID.class));
-                    user.setName(rs.getString("user_name"));
-                    user.setLogin(rs.getString("user_login"));
-                    user.setEmail(rs.getString("user_email"));
-                    user.setPassword(rs.getString("user_password"));
-                    user.setLastUpdate(rs.getObject("user_last_update", LocalDateTime.class));
-
-                    var addressId = rs.getObject("address_id", UUID.class);
-                    if (addressId != null) {
-                        AddressEntity address = new AddressEntity();
-                        address.setId(addressId);
-                        address.setStreet(rs.getString("address_street"));
-                        address.setCity(rs.getString("address_city"));
-                        address.setState(rs.getString("address_state"));
-                        address.setZip(rs.getString("address_zip"));
-                        address.setNumber(rs.getString("address_number"));
-                        user.setAddress(address);
-                    }
-
+                    var user = userMapper.map(rs);
+                    user.setAddress(addressMapper.map(rs));
                     return user;
                 })
                 .list();
