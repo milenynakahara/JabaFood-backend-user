@@ -13,7 +13,7 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class LoginAlreadyInUseValidation implements CreateUserValidation {
+public class LoginAlreadyInUseValidation implements CreateUserValidation, UpdateUserValidation {
 
     UserRepository userRepository;
 
