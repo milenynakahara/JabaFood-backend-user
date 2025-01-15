@@ -13,6 +13,8 @@ public interface UserRepository extends Repository<UserEntity> {
 
     Optional<UserEntity> updatePassword(UserEntity userEntity);
 
+    Optional<UserEntity> findById(UUID id);
+
     void deleteById(UUID id);
 
 }

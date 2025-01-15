@@ -2,6 +2,7 @@ package app.jaba.controllers;
 
 import app.jaba.dtos.UpdatePasswordDto;
 import app.jaba.dtos.UserDto;
+import app.jaba.entities.UserEntity;
 import app.jaba.mappers.UserMapper;
 import app.jaba.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,11 +12,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -38,6 +41,15 @@ public class UserController {
     public ResponseEntity<UserDto> create(@Validated @RequestBody UserDto userDto) {
         log.info("Creating user: {}", userDto);
         return ResponseEntity.ok(userMapper.map(userService.save(userMapper.map(userDto))));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> findById(@PathVariable(value= "id")UUID id) {
+        Optional<UserEntity> userEntityOptional = userService.findById(id);
+        if (!userEntityOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userEntityOptional.get());
     }
 
     @Operation(summary = "Get all users")
