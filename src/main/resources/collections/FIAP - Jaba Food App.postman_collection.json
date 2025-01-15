@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "26cf376c-fdf9-4cc8-bb15-193702152f50",
+		"_postman_id": "31232263-c806-482e-9876-1e9a8492d41a",
 		"name": "FIAP - Jaba Food App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "9428245"
+		"_exporter_id": "4369674"
 	},
 	"item": [
 		{
@@ -13,6 +13,211 @@
 					"name": "/api/v1/users/:id",
 					"request": {
 						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"b7533d11-5eae-4023-9d63-154b65e36451\",\n    \"name\": \"Roberto Carlos\",\n    \"login\": \"roberto.carlos21\",\n    \"email\": \"roberto.carlos21@jaba.com\",\n    \"address\": {\n        \"id\": \"f067c52a-4e20-4c1c-8d61-2a7d8687525a\",\n        \"street\": \"Rua das Flores\",\n        \"city\": \"Rio de Janeiro\",\n        \"state\": \"RJ\",\n        \"zip\": \"50712-432\",\n        \"number\": \"13\"\n    }\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b7533d11-5eae-4023-9d63-154b65e36451",
+									"description": "(Required) "
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "User updated successfully",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\"\n\t}\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/api/v1/users/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"b7533d11-5eae-4023-9d63-154b65e36451\",\n    \"name\": \"Roberto Carlos\",\n    \"login\": \"roberto.carlos21\",\n    \"email\": \"roberto.carlos21@jaba.com\",\n    \"address\": {\n        \"id\": \"f067c52a-4e20-4c1c-8d61-2a7d8687525a\",\n        \"street\": \"Rua das Flores\",\n        \"city\": \"Rio de Janeiro\",\n        \"state\": \"RJ\",\n        \"zip\": \"50712-432\",\n        \"number\": \"13\"\n    }\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b7533d11-5eae-4023-9d63-154b65e36451",
+									"description": "(Required) "
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "User updated successfully",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"password\": \"password123\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\"\n\t}\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"email\": \"roberto.carlos@jaba.com\",\n\t\"login\": \"roberto.carlos\",\n\t\"name\": \"Roberto Carlos\",\n\t\"id\": \"04870a33-235f-4610-a74e-9e057c46a134\",\n\t\"address\": {\n\t\t\"city\": \"Rio de Janeiro\",\n\t\t\"number\": \"13\",\n\t\t\"state\": \"RJ\",\n\t\t\"street\": \"Rua das Flores\",\n\t\t\"zip\": \"50712-432\",\n\t\t\"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n\t},\n\t\"lastUpdate\": \"2024-11-26T21:22:48.434Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/api/v1/users/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
