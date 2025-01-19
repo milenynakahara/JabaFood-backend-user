@@ -44,9 +44,14 @@ public class UserService {
      * @return a list of UserDto objects.
      */
     public List<UserDto> findAll(int page, int size) {
+        log.info("Starting findAll with page: {}, size: {}", page, size);
+
         pageAndSizeValidation.validate(page, size);
         int offset = page > 0 ? (page - 1) * size : 0;
-        return userRepository.findAll(size, offset).stream().map(userMapper::map).toList();
+        List<UserDto> users = userRepository.findAll(size, offset).stream().map(userMapper::map).toList();
+
+        log.info("Finished findAll with {} users", users.size());
+        return users;
     }
 
     /**
@@ -58,12 +63,17 @@ public class UserService {
      * @throws UserNotFoundException if the user with the given ID does not exist.
      */
     public UserDto findById(UUID id) {
+        log.info("Starting findById with id: {}", id);
+
         if (id == null) {
+            log.error("InvalidSizeValueException: Id is null");
             throw new InvalidSizeValueException("Id is not found");
         }
-        String msgError = String.format("User with id %s does not exist.", id);
 
+        String msgError = String.format("User with id %s does not exist.", id);
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(msgError));
+
+        log.info("Finished findById with user: {}", user);
         return userMapper.map(user);
     }
 
@@ -75,6 +85,8 @@ public class UserService {
      * @throws SaveUserException if there is an error while saving the user.
      */
     public UserDto save(UserDto userDto) {
+        log.info("Starting save with userDto: {}", userDto);
+
         UserEntity userEntity = userMapper.map(userDto);
         validations.forEach(validation -> validation.validate(userEntity));
 
@@ -82,13 +94,15 @@ public class UserService {
                 .orElseThrow(() -> new SaveUserException("Error saving user"));
 
         saveAddress(user);
+
+        log.info("Finished save with user: {}", user);
         return userMapper.map(user);
     }
 
     /**
      * Updates an existing user.
      *
-     * @param id      the UUID of the user.
+     * @param id the UUID of the user.
      * @param userDto the UserDto object with the updated data.
      * @return the updated UserDto object.
      * @throws InvalidSizeValueException if the ID is null.
@@ -96,13 +110,16 @@ public class UserService {
      * @throws UpdateUserException if there is an error while updating the user.
      */
     public UserDto update(UUID id, UserDto userDto) {
-        UserEntity userEntity = userMapper.map(userDto);
+        log.info("Starting update with id: {}, userDto: {}", id, userDto);
 
         if (id == null) {
+            log.error("InvalidSizeValueException: Id is null");
             throw new InvalidSizeValueException("Id is not found");
         }
+
         var userFound = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+        UserEntity userEntity = userMapper.map(userDto);
         userEntity.setId(id);
         userEntity.setPassword(userFound.getPassword());
         updateUserValidations.forEach(validation -> validation.validate(userEntity));
@@ -112,6 +129,7 @@ public class UserService {
 
         updateAddress(user);
 
+        log.info("Finished update for user: {}", user.getId());
         return userMapper.map(user);
     }
 
@@ -127,11 +145,14 @@ public class UserService {
      * @throws UpdatePasswordException if there is an error while updating the password.
      */
     public UserDto updatePassword(UUID id, UpdatePasswordDto updatePasswordDto) {
+        log.info("Starting update with id: {}, updatePasswordDto: {}", id, updatePasswordDto);
+
         UpdatePasswordEntity updatePasswordEntity = userMapper.map(updatePasswordDto);
 
         updatePasswordValidations.forEach(validation -> validation.validate(updatePasswordEntity));
 
         if (id == null) {
+            log.error("InvalidSizeValueException: Id is null");
             throw new InvalidSizeValueException("Id is not found");
         }
 
@@ -139,13 +160,16 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!user.getPassword().equals(updatePasswordEntity.getOldPassword())) {
-            throw new InvalidPasswordException("The old password is invalid");
+            String msgError = "The old password is invalid";
+            log.error("InvalidPasswordException: {}", msgError);
+            throw new InvalidPasswordException(msgError);
         }
 
         user.setPassword(updatePasswordEntity.getNewPassword());
         var updateUser = userRepository.updatePassword(user)
                 .orElseThrow(() -> new UpdatePasswordException("Error updating password"));
 
+        log.info("Finished update for password: {}", user.getId());
         return userMapper.map(updateUser);
     }
 
@@ -157,12 +181,16 @@ public class UserService {
      * @throws UserNotFoundException if the user with the given ID does not exist.
      */
     public void deleteById(UUID id) {
+        log.info("Starting delete with id: {}", id);
         if (id == null) {
+            log.error("InvalidSizeValueException: Id is null");
             throw new InvalidSizeValueException("Id is not found");
         }
 
         var userFound = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        log.info("Finished delete with id: {}", userFound.getId());
         userRepository.deleteById(userFound.getId());
     }
 
@@ -187,6 +215,4 @@ public class UserService {
     private void updateAddress(UserEntity userUpdated) {
         userUpdated.setAddress(addressService.update(userUpdated.getId(), userUpdated.getAddress()));
     }
-
-
 }
