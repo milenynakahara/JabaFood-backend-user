@@ -56,12 +56,14 @@ public class UserController {
         } catch (UserNotFoundException | InvalidSizeValueException e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
     @Operation(summary = "Create a new user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User created successfully"),
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "500", description = "Internal server error"),
     })
@@ -73,11 +75,18 @@ public class UserController {
             UserDto result = userService.save(userDto);
 
             log.info("Starting creation of user with id: {}", result.id());
-            return ResponseEntity.ok(result);
-        } catch (SaveUserException e) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+
+        } catch (SaveUserException | EmailFormatException | UserMandatoryFieldException e) {
             log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (EmailAlreadyInUseException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+
     }
 
     @Operation(summary = "Update a user by id")
@@ -97,6 +106,8 @@ public class UserController {
         } catch (UpdateUserException e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -118,6 +129,8 @@ public class UserController {
         } catch (UpdatePasswordException e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -136,6 +149,8 @@ public class UserController {
             String msgError = String.format("%s, id: %s", e.getMessage(), id);
             log.error(msgError);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(msgError);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
