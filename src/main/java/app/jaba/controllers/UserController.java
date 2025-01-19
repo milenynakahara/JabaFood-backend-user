@@ -32,13 +32,13 @@ public class UserController {
 
     @Operation(summary = "Create a new user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User created successfully"),
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping
     public ResponseEntity<UserDto> create(@Validated @RequestBody UserDto userDto) {
         log.info("Creating user: {}", userDto);
-        return ResponseEntity.ok(userMapper.map(userService.save(userMapper.map(userDto))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.map(userService.save(userMapper.map(userDto))));
     }
 
     @Operation(summary = "Get a user by id")
@@ -65,7 +65,7 @@ public class UserController {
 
     @Operation(summary = "Update a user by id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User updated successfully")
+            @ApiResponse(responseCode = "200", description = "User updated successfully")
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
