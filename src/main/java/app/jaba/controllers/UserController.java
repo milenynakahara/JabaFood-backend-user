@@ -41,6 +41,10 @@ public class UserController {
         return ResponseEntity.ok(userMapper.map(userService.save(userMapper.map(userDto))));
     }
 
+    @Operation(summary = "Get a user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User created successfully")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable(value = "id") UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.map(userService.findById(id)));
