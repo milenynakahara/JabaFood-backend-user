@@ -5,8 +5,6 @@ This is a backend system for a collaborative restaurant management platform deve
 ## Key Features
 
 - User Management (Restaurant Owners and Customers)
-- Secure Authentication
-- Profile Management
 - Password Change Functionality
 
 ## Technical Stack
