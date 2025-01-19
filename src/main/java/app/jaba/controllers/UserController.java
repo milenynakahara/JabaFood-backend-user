@@ -2,7 +2,7 @@ package app.jaba.controllers;
 
 import app.jaba.dtos.UpdatePasswordDto;
 import app.jaba.dtos.UserDto;
-import app.jaba.exceptions.*;
+import app.jaba.mappers.UserMapper;
 import app.jaba.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,115 +28,70 @@ import java.util.UUID;
 public class UserController {
 
     UserService userService;
-
-    @Operation(summary = "Get all users")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
-    })
-    @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size,
-                                                 @RequestParam(value = "page", defaultValue = "0") int page) {
-        log.info("Finding all users");
-        return ResponseEntity.ok(userService.findAll(page, size));
-    }
-
-    @Operation(summary = "Get user")
-    @GetMapping("/{id}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
-    })
-    public ResponseEntity<Object> findById(@PathVariable(value = "id") UUID id) {
-        try {
-            log.info("Starting search for user with id: {}", id);
-            UserDto result = userService.findById(id);
-
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (UserNotFoundException | InvalidSizeValueException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
+    UserMapper userMapper;
 
     @Operation(summary = "Create a new user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping
-    public ResponseEntity<Object> create(@Validated @RequestBody UserDto userDto) {
-        log.info("Starting creation of user: {}", userDto);
+    public ResponseEntity<UserDto> create(@Validated @RequestBody UserDto userDto) {
+        log.info("Creating user: {}", userDto);
+        return ResponseEntity.ok(userMapper.map(userService.save(userMapper.map(userDto))));
+    }
 
-        try {
-            UserDto result = userService.save(userDto);
+    @Operation(summary = "Get a user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User created successfully")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> findById(@PathVariable(value = "id") UUID id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userMapper.map(userService.findById(id)));
+    }
 
-            log.info("Starting creation of user with id: {}", result.id());
-            return ResponseEntity.ok(result);
-        } catch (SaveUserException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @Operation(summary = "Get all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
+    })
+    @GetMapping
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "page", defaultValue = "0") int page) {
+        log.info("Finding all users");
+        return ResponseEntity.ok(userService.findAll(page, size)
+                .stream()
+                .map(userMapper::map)
+                .toList());
     }
 
     @Operation(summary = "Update a user by id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User updated successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "204", description = "User updated successfully")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
         log.info("Updating user with id: {}", id);
-        try {
-            UserDto result = userService.update(id, userDto);
-            return ResponseEntity.ok(result);
-        } catch (UserNotFoundException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (UpdateUserException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-        }
+        return ResponseEntity.ok(userMapper.map(userService.update(id, userMapper.map(userDto))));
     }
 
     @Operation(summary = "Update user password")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User password updated successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PatchMapping("/{id}/password")
-    public ResponseEntity<Object> updatePassword(@PathVariable("id") UUID id, @Validated @RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<UserDto> updatePassword(@PathVariable("id") UUID id, @Validated @RequestBody UpdatePasswordDto updatePasswordDto) {
         log.info("Updating user password with id: {}", id);
-        try {
-            UserDto result = userService.updatePassword(id, updatePasswordDto);
-            return ResponseEntity.ok(result);
-        } catch (UserNotFoundException | InvalidPasswordException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (UpdatePasswordException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-        }
+        return ResponseEntity.ok(userMapper.map(userService.updatePassword(id, userMapper.map(updatePasswordDto))));
     }
 
     @Operation(summary = "Delete a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "204", description = "User deleted successfully")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID id) {
         log.info("Deleting user with id: {}", id);
-        try {
-            userService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }catch (UserNotFoundException | InvalidSizeValueException e) {
-            String msgError = String.format("%s, id: %s", e.getMessage(), id);
-            log.error(msgError);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(msgError);
-        }
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
-

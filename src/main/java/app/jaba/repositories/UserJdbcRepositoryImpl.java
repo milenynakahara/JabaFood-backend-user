@@ -1,6 +1,5 @@
 package app.jaba.repositories;
 
-import app.jaba.entities.AddressEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.mappers.AddressMapper;
 import app.jaba.mappers.UserMapper;
@@ -26,35 +25,21 @@ public class UserJdbcRepositoryImpl implements UserRepository {
     @Override
     public Optional<UserEntity> findById(UUID id) {
         String sql = """               
-                SELECT u.id AS user_id, u.name AS user_name, u.login AS user_login, u.email AS user_email, u.password AS user_password, u.last_update AS user_last_update,
-                       a.id AS address_id, a.street AS address_street, a.city AS address_city, a.state AS address_state, a.zip AS address_zip, a.number AS address_number                          \s
-                FROM users u
-                LEFT JOIN addresses a ON u.id = a.user_id
-                WHERE u.id = ?
-               """;
+                 SELECT u.id AS user_id, u.name AS user_name, u.login AS user_login, u.email AS user_email, u.password AS user_password, u.last_update AS user_last_update,
+                        a.id AS address_id, a.street AS address_street, a.city AS address_city, a.state AS address_state, a.zip AS address_zip, a.number AS address_number                          \s
+                 FROM users u
+                 LEFT JOIN addresses a ON u.id = a.user_id
+                 WHERE u.id = ?
+                """;
         return jdbcClient
                 .sql(sql)
                 .param(id)
                 .query(rs -> {
-                    if (!rs.next()){
+                    if (!rs.next()) {
                         return Optional.empty();
                     }
-                    UserEntity user = new UserEntity();
-                    user.setId(rs.getObject("user_id", UUID.class));
-                    user.setName(rs.getString("user_name"));
-                    user.setLogin(rs.getString("user_login"));
-                    user.setEmail(rs.getString("user_email"));
-                    user.setPassword(rs.getString("user_password"));
-                    user.setLastUpdate(rs.getObject("user_last_update", LocalDateTime.class));
-
-                    AddressEntity addresse = new AddressEntity();
-                    addresse.setId(rs.getObject("address_id", UUID.class));
-                    addresse.setStreet(rs.getString("address_street"));
-                    addresse.setCity(rs.getString("address_city"));
-                    addresse.setState(rs.getString("address_state"));
-                    addresse.setZip(rs.getString("address_zip"));
-                    addresse.setNumber(rs.getString("address_number"));
-                    user.setAddress(addresse);
+                    var user = userMapper.map(rs);
+                    user.setAddress(addressMapper.map(rs));
 
                     return Optional.of(user);
                 });

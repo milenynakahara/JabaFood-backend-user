@@ -1,11 +1,8 @@
 package app.jaba.services;
 
-import app.jaba.dtos.UpdatePasswordDto;
-import app.jaba.dtos.UserDto;
 import app.jaba.entities.UpdatePasswordEntity;
 import app.jaba.entities.UserEntity;
 import app.jaba.exceptions.*;
-import app.jaba.mappers.UserMapper;
 import app.jaba.repositories.UserRepository;
 import app.jaba.services.validations.PageAndSizeValidation;
 import app.jaba.services.validations.updatepassword.UpdatePasswordValidation;
@@ -34,106 +31,87 @@ public class UserService {
     List<UpdateUserValidation> updateUserValidations;
     PageAndSizeValidation pageAndSizeValidation;
     List<UpdatePasswordValidation> updatePasswordValidations;
-    UserMapper userMapper;
 
     /**
      * Finds all users with pagination.
      *
      * @param page the page number to retrieve.
      * @param size the number of items per page.
-     * @return a list of UserDto objects.
+     * @return a list of UserEntity objects.
      */
-    public List<UserDto> findAll(int page, int size) {
+    public List<UserEntity> findAll(int page, int size) {
         pageAndSizeValidation.validate(page, size);
         int offset = page > 0 ? (page - 1) * size : 0;
-        return userRepository.findAll(size, offset).stream().map(userMapper::map).toList();
+        return userRepository.findAll(size, offset);
     }
 
     /**
      * Finds a user by their ID.
      *
      * @param id the UUID of the user.
-     * @return a UserDto object.
-     * @throws InvalidSizeValueException if the ID is null.
+     * @return a UserEntity object.
      * @throws UserNotFoundException if the user with the given ID does not exist.
      */
-    public UserDto findById(UUID id) {
-        if (id == null) {
-            throw new InvalidSizeValueException("Id is not found");
-        }
-        String msgError = String.format("User with id %s does not exist.", id);
-
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(msgError));
-        return userMapper.map(user);
+    public UserEntity findById(UUID id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     /**
      * Saves a new user.
      *
-     * @param userDto the UserDto object to save.
-     * @return the saved UserDto object.
+     * @param userEntity the UserEntity object to save.
+     * @return the saved UserEntity object.
      * @throws SaveUserException if there is an error while saving the user.
      */
-    public UserDto save(UserDto userDto) {
-        UserEntity userEntity = userMapper.map(userDto);
+    public UserEntity save(UserEntity userEntity) {
         validations.forEach(validation -> validation.validate(userEntity));
 
-        var user = userRepository.save(userEntity)
+        var userSaved = userRepository.save(userEntity)
                 .orElseThrow(() -> new SaveUserException("Error saving user"));
 
-        saveAddress(user);
-        return userMapper.map(user);
+        saveAddress(userSaved);
+
+        return userSaved;
     }
 
     /**
      * Updates an existing user.
      *
      * @param id      the UUID of the user.
-     * @param userDto the UserDto object with the updated data.
+     * @param userEntity the UserEntity object with the updated data.
      * @return the updated UserDto object.
-     * @throws InvalidSizeValueException if the ID is null.
      * @throws UserNotFoundException if the user with the given ID does not exist.
      * @throws UpdateUserException if there is an error while updating the user.
      */
-    public UserDto update(UUID id, UserDto userDto) {
-        UserEntity userEntity = userMapper.map(userDto);
-
-        if (id == null) {
-            throw new InvalidSizeValueException("Id is not found");
-        }
+    public UserEntity update(UUID id, UserEntity userEntity) {
         var userFound = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         userEntity.setId(id);
         userEntity.setPassword(userFound.getPassword());
         updateUserValidations.forEach(validation -> validation.validate(userEntity));
 
-        var user = userRepository.update(userEntity)
+        var userUpdated = userRepository.update(userEntity)
                 .orElseThrow(() -> new UpdateUserException("Error updating user"));
 
-        updateAddress(user);
+        updateAddress(userUpdated);
 
-        return userMapper.map(user);
+        return userUpdated;
     }
 
     /**
      * Updates the password of an existing user.
      *
      * @param id                 the UUID of the user.
-     * @param updatePasswordDto  the UpdatePasswordDto object with the updated password.
-     * @return the updated UserDto object.
-     * @throws InvalidSizeValueException if the ID is null.
+     * @param updatePasswordEntity  the UpdatePasswordEntity object with the updated password.
+     * @return the updated UserEntity object.
      * @throws UserNotFoundException if the user with the given ID does not exist.
      * @throws InvalidPasswordException if the old password is incorrect.
      * @throws UpdatePasswordException if there is an error while updating the password.
      */
-    public UserDto updatePassword(UUID id, UpdatePasswordDto updatePasswordDto) {
-        UpdatePasswordEntity updatePasswordEntity = userMapper.map(updatePasswordDto);
-
+    public UserEntity updatePassword(UUID id, UpdatePasswordEntity updatePasswordEntity) {
         updatePasswordValidations.forEach(validation -> validation.validate(updatePasswordEntity));
-
-        if (id == null) {
-            throw new InvalidSizeValueException("Id is not found");
-        }
 
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -143,24 +121,17 @@ public class UserService {
         }
 
         user.setPassword(updatePasswordEntity.getNewPassword());
-        var updateUser = userRepository.updatePassword(user)
+        return userRepository.updatePassword(user)
                 .orElseThrow(() -> new UpdatePasswordException("Error updating password"));
-
-        return userMapper.map(updateUser);
     }
 
     /**
      * Deletes a user by their ID.
      *
      * @param id the UUID of the user.
-     * @throws InvalidSizeValueException if the ID is null.
      * @throws UserNotFoundException if the user with the given ID does not exist.
      */
     public void deleteById(UUID id) {
-        if (id == null) {
-            throw new InvalidSizeValueException("Id is not found");
-        }
-
         var userFound = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         userRepository.deleteById(userFound.getId());
@@ -169,7 +140,7 @@ public class UserService {
     /**
      * Saves the address of a user.
      *
-     * @param userSaved the UserEntity object with the user information.
+     * @param userSaved the UserEntity object with the user address information.
      */
     private void saveAddress(UserEntity userSaved) {
         var address = userSaved.getAddress();
@@ -182,11 +153,10 @@ public class UserService {
     /**
      * Updates the address of a user.
      *
-     * @param userUpdated the UserEntity object with the updated user information.
+     * @param userUpdated the UserEntity object with the updated user address information.
      */
     private void updateAddress(UserEntity userUpdated) {
         userUpdated.setAddress(addressService.update(userUpdated.getId(), userUpdated.getAddress()));
     }
-
 
 }
