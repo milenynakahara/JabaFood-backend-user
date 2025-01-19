@@ -2,7 +2,6 @@ package app.jaba.controllers;
 
 import app.jaba.dtos.UpdatePasswordDto;
 import app.jaba.dtos.UserDto;
-import app.jaba.entities.UserEntity;
 import app.jaba.mappers.UserMapper;
 import app.jaba.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -44,12 +42,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable(value= "id")UUID id) {
-        Optional<UserEntity> userEntityOptional = userService.findById(id);
-        if (!userEntityOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(userEntityOptional.get());
+    public ResponseEntity<UserDto> findById(@PathVariable(value = "id") UUID id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userMapper.map(userService.findById(id)));
     }
 
     @Operation(summary = "Get all users")
@@ -86,7 +80,7 @@ public class UserController {
         return ResponseEntity.ok(userMapper.map(userService.updatePassword(id, userMapper.map(updatePasswordDto))));
     }
 
-    @Operation(summary="Delete a user")
+    @Operation(summary = "Delete a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deleted successfully")
     })

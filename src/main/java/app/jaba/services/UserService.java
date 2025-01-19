@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -39,11 +38,10 @@ public class UserService {
         return userRepository.findAll(size, offset);
     }
 
-    public Optional<UserEntity> findById(UUID id) {
-        if (id == null) {
-            throw new InvalidSizeValueException("Id is not found");
-        }
-        return userRepository.findById(id);
+    public UserEntity findById(UUID id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     public UserEntity save(UserEntity userEntity) {
