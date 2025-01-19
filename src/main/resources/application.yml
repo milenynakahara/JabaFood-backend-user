@@ -1,2 +1,16 @@
-spring.application.name:
-  JabaFood-backend-user
+spring:
+  application:
+    name: jaba-food-backend-user
+    version: @project.version@
+    description: @project.description@
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/jaba}
+    username: ${DATABASE_USER:user}
+    password: ${DATABASE_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: ${FLYWAY_DATABASE_URL:jdbc:postgresql://localhost:5432/jaba}
+    user: ${FLYWAY_DATABASE_USER:user}
+    password: ${FLYWAY_DATABASE_PASSWORD:password}
+    enabled: true
+

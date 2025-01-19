@@ -1,10 +1,19 @@
-HELP.md
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Maven
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.mvn/
+mvnw
+mvnw.cmd
 
-### STS ###
+# Spring Tool Suite
 .apt_generated
 .classpath
 .factorypath
@@ -13,26 +22,19 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Others
+HELP.md
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-.mvn/
-mvnw
-mvnw.cmd
 .gitattributes
