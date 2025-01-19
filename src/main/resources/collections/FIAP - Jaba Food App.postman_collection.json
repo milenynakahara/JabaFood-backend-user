@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "31232263-c806-482e-9876-1e9a8492d41a",
+		"_postman_id": "3d564114-56d4-47a9-8041-afc619996e02",
 		"name": "FIAP - Jaba Food App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "4369674"
+		"_exporter_id": "10124091"
 	},
 	"item": [
 		{
@@ -47,7 +47,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "b7533d11-5eae-4023-9d63-154b65e36451",
+									"value": "{{userId}}",
 									"description": "(Required) "
 								}
 							]
@@ -79,10 +79,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/users/:id",
+									"raw": "http://localhost:8080/api/v1/users/:id",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -148,8 +150,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "b7533d11-5eae-4023-9d63-154b65e36451",
-									"description": "(Required) "
+									"value": "{{userId}}"
 								}
 							]
 						}
@@ -180,10 +181,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/users/:id",
+									"raw": "http://localhost:8080/api/v1/users/:id",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -252,7 +255,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "b7533d11-5eae-4023-9d63-154b65e36451",
+									"value": "{{userId}}",
 									"description": "(Required) "
 								}
 							]
@@ -284,10 +287,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/users/:id",
+									"raw": "http://localhost:8080/api/v1/users/:id",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -359,10 +364,12 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/users?size=10&page=1",
+									"raw": "http://localhost:8080/api/v1/users?size=10&page=1",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -396,6 +403,27 @@
 				},
 				{
 					"name": "/api/v1/users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// recupera o ID da resposta\r",
+									"var response = pm.response.json();\r",
+									"var userId = response.id;\r",
+									"\r",
+									"// Armazena o ID gerado em uma variável do Postman\r",
+									"pm.environment.set(\"userId\", userId);\r",
+									"\r",
+									"// Output no console do Postman\r",
+									"//console.log(\"ID recuperado: \" + userId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -456,10 +484,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/users",
+									"raw": "http://localhost:8080/api/v1/users",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -600,10 +630,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/v1/users/:id/password",
+									"raw": "http://localhost:8080/api/v1/users/:id/password",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"api",
 										"v1",
